@@ -1,14 +1,14 @@
 import pandas as pd
 import os
-import psycopg2
+from sqlalchemy import create_engine
 
 # Connexion à la base de données PostgreSQL
 DATABASE_URL = os.getenv('DATABASE_URL')
-connection = psycopg2.connect(DATABASE_URL)
+engine = create_engine(DATABASE_URL)
 
 # Lecture des données de la table t_consommation dans un DataFrame
 query = "SELECT * FROM t_consommation"
-df = pd.read_sql(query, connection)
+df = pd.read_sql(query, engine)
 
 # Affichage du DataFrame
-print(df)
+print(df.shape)
