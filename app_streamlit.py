@@ -1,7 +1,7 @@
 import streamlit as st
-
 import numpy as np
 import pandas as pd
+from DB import df
 
 st.markdown("""# Bienvenue sur notre app !
 ## DataFrames 

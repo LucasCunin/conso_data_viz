@@ -1,5 +1,14 @@
+import pandas as pd
+import os
 import psycopg2
 
-DATABASE_URL = 'postgres://gema:7jj3ZrNfd1VdmGrfx3wJ2283XyneTBOU@dpg-cntb0cacn0vc73f0f9rg-a.frankfurt-postgres.render.com/dbconsommation'
+# Connexion à la base de données PostgreSQL
+DATABASE_URL = os.getenv('DATABASE_URL')
 connection = psycopg2.connect(DATABASE_URL)
-cursor = connection.cursor()
+
+# Lecture des données de la table t_consommation dans un DataFrame
+query = "SELECT * FROM t_consommation"
+df = pd.read_sql(query, connection)
+
+# Affichage du DataFrame
+print(df)
