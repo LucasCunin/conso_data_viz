@@ -12,8 +12,8 @@ engine = create_engine(DATABASE_URL)
 
 
 # Lecture des données de la table t_consommation dans un DataFrame
-query = "SELECT * FROM t_consommation"
+query = "SELECT * FROM t_consommation_commune"
 df = pd.read_sql(query, engine)
 
-
+print(df.head())
 
