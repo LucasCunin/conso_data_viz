@@ -4,12 +4,16 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from maps import main
-#from DB import df # import du DataFrame df depuis la DB
+from DB import df_commune, df_departement, df_region # import du DataFrame df depuis la DB
 
 
 #récupération des dataframe
+
 region_df = pd.read_csv('conso-elec-gaz-region.csv', sep=';')
 departement_df = pd.read_csv('conso-elec-gaz-departement.csv', sep = ';')
+
+#region_df = df_region
+#departement_df = df_departement
 
 # Définir les pages
 ##############################################_Page 1_##############################################
@@ -205,7 +209,12 @@ def page3(df = departement_df):
     plt.axis('equal') 
     st.pyplot(plt)
 
+    st.markdown("""--------------
+    """)
+
     #plot numéro 3
+
+    st.markdown("<center>Évolution de la consommation pour chaque opérateur</center>", unsafe_allow_html=True)
 
     df_copy = df.copy()
     sum_conso_by_operator = df_copy.groupby('operateur')['consototale'].sum()
@@ -219,7 +228,7 @@ def page3(df = departement_df):
     for operator in grouped_data.columns:
         sns.lineplot(x=grouped_data.index, y=grouped_data[operator], marker='o', label=operator)
 
-    plt.title("Évolution de la consommation pour chaque opérateur")
+    #plt.title("Évolution de la consommation pour chaque opérateur")
     plt.xlabel("Année")
     plt.ylabel("Consommation")
     plt.legend()

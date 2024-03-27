@@ -12,8 +12,16 @@ engine = create_engine(DATABASE_URL)
 
 
 # Lecture des données de la table t_consommation dans un DataFrame
-query = "SELECT * FROM t_consommation_commune"
-df = pd.read_sql(query, engine)
+query_c = "SELECT * FROM t_consommation_commune"
+query_d = "SELECT * FROM t_consommation_departement"
+query_r = "SELECT * FROM t_consommation_region"
 
-print(df.head())
+df_commune = pd.read_sql(query_c, engine)
+df_departement = pd.read_sql(query_d, engine)
+df_region = pd.read_sql(query_r, engine)
+
+print(df_commune.head())
+print(df_departement.head())
+print(df_region.head())
+
 
