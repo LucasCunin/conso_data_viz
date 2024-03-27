@@ -144,6 +144,7 @@ def page3(df = departement_df):
 
     # Ajout de l'option 'All'
     regions = list(regions)
+    regions = sorted(regions)
     regions.insert(0, 'All')
 
     # Création du menu déroulant
@@ -203,6 +204,27 @@ def page3(df = departement_df):
     plt.title('Part de la consommation par opérateur')
     plt.axis('equal') 
     st.pyplot(plt)
+
+    #plot numéro 3
+
+    df_copy = df.copy()
+    sum_conso_by_operator = df_copy.groupby('operateur')['consototale'].sum()
+    total_sum = sum_conso_by_operator.sum()
+    small_operators = sum_conso_by_operator[sum_conso_by_operator < 0.05 * total_sum].index
+    df_copy.loc[df_copy['operateur'].isin(small_operators), 'operateur'] = 'Autres'
+    grouped_data = df_copy.groupby(['annee', 'operateur'])['consototale'].sum().unstack()
+
+    plt.figure(figsize=(10, 6))
+    sns.set_style("whitegrid")
+    for operator in grouped_data.columns:
+        sns.lineplot(x=grouped_data.index, y=grouped_data[operator], marker='o', label=operator)
+
+    plt.title("Évolution de la consommation pour chaque opérateur")
+    plt.xlabel("Année")
+    plt.ylabel("Consommation")
+    plt.legend()
+    st.pyplot(plt)
+
 
 ####################################################################################################
 
