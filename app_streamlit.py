@@ -49,6 +49,10 @@ def page2(df = region_df):
     plt.legend(title='Région', bbox_to_anchor=(1.05, 1), loc='upper left')
     st.pyplot(fig)
 
+    st.markdown("""--------------
+    
+    """)
+
     #graph2: meme chose mais séparer par filière (gaz et elec)
 
     fig, ax = plt.subplots()
@@ -69,32 +73,39 @@ def page2(df = region_df):
     plt.legend(title='Région', bbox_to_anchor=(1.05, 1), loc='upper left')
     st.pyplot(fig)
 
-    #graph 3 : consommation elec (camamber) par catégorie
+    st.markdown("""--------------
+    
+    """)
 
+    #graph 3 : consommation elec (camamber) par catégorie
+    st.markdown("<center>Répartition de la consommation d'électricité par type de consomateur</center>", unsafe_allow_html=True)
     # Créer le pie chart pour la filière Electricité
     fig1, ax1 = plt.subplots(figsize=(10, 6))
-    ax1.pie(conso_par_code_electricite, labels=conso_par_code_electricite.index, autopct='%1.1f%%', colors=sns.color_palette())
-    plt.title('Répartition de la consommation par code de catégorie (Électricité)')
+    ax1.pie(conso_par_code_electricite, labels=conso_par_code_electricite.index, autopct='%1.1f%%', colors=sns.color_palette("cool"))
+    #plt.title('Répartition de la consommation par code de catégorie (Électricité)')
     plt.axis('equal')
     st.pyplot(fig1)
 
-
     #graph 4 : consommation gaz (camamber) par catégorie
-
+    st.markdown("<center>Répartition de la consommation de gaz par type de consomateur</center>", unsafe_allow_html=True)
     # Créer le pie chart pour la filière Gaz
     fig2, ax2 = plt.subplots(figsize=(10, 6))
-    ax2.pie(conso_par_code_gaz, labels=conso_par_code_gaz.index, autopct='%1.1f%%', colors=sns.color_palette())
-    plt.title('Répartition de la consommation par code de catégorie (Gaz)')
+    ax2.pie(conso_par_code_gaz, labels=conso_par_code_gaz.index, autopct='%1.1f%%', colors=sns.color_palette("YlOrRd"))
+    #plt.title('Répartition de la consommation par code de catégorie (Gaz)')
     plt.axis('equal')
     st.pyplot(fig2)
 
+    
+    st.markdown("""--------------
+    
+    """) 
 
     #graph 5 et 6 evolution du tyoe de consomateur en focntion de l'année
-
+    st.markdown('<center>Évolution de la consommation par catégorie pour l\'électricité</center>', unsafe_allow_html=True)
     #elec
     plt.figure(figsize=(12, 8))
-    consommation_evolution_electricite.plot(kind='bar', stacked=True, ax=plt.subplot(211))
-    plt.title("Évolution de la consommation par catégorie pour l'électricité")
+    consommation_evolution_electricite.plot(kind='bar', stacked=True, ax=plt.subplot(211), colormap="cool")
+    #plt.title("Évolution de la consommation par catégorie pour l'électricité")
     plt.xlabel("Année")
     plt.ylabel("Consommation")
     plt.legend(title='Code catégorie', bbox_to_anchor=(1.05, 1), loc='upper left')
@@ -102,10 +113,11 @@ def page2(df = region_df):
     plt.tight_layout()
     st.pyplot(plt)
 
+    st.markdown('<center>Évolution de la consommation par catégorie pour le gaz</center>', unsafe_allow_html=True)
     #gaz
     plt.figure(figsize=(12, 8))
-    consommation_evolution_gaz.plot(kind='bar', stacked=True, ax=plt.subplot(212))
-    plt.title("Évolution de la consommation par catégorie pour le gaz")
+    consommation_evolution_gaz.plot(kind='bar', stacked=True, ax=plt.subplot(212), colormap="YlOrRd")
+    #plt.title("Évolution de la consommation par catégorie pour le gaz")
     plt.xlabel("Année")
     plt.ylabel("Consommation")
     plt.legend(title='Code catégorie', bbox_to_anchor=(1.05, 1), loc='upper left')
@@ -128,10 +140,34 @@ def page3(df = departement_df):
     dom_tom = ['Guadeloupe', 'Martinique', 'Guyane', 'La Réunion', 'Mayotte']
     regions = [region for region in regions if region not in dom_tom]
 
-    for region in regions:
-        # Filter the data for the specific region
-        region_data = df[df['libelle_region'] == region]
+    # Ajout de l'option 'All'
+    regions = list(regions)
+    regions.insert(0, 'All')
 
+    # Création du menu déroulant
+    selected_region = st.selectbox('Choisissez une région', regions)
+
+    if selected_region == 'All':
+        for region in regions[1:]:
+            # Filter the data for the specific region
+            region_data = df[df['libelle_region'] == region]
+            # Group the consumption by year and by department
+            grouped_data = region_data.groupby(['annee', 'libelle_departement'])['consototale'].sum().unstack()
+
+            # Create the plot
+            fig, ax = plt.subplots(figsize=(10, 6))
+            sns.lineplot(data=grouped_data, markers=True, ax=ax)
+            plt.xlabel('Année')
+            plt.ylabel('Consommation')
+            plt.title(f'{region}')
+            plt.legend(title='Département', bbox_to_anchor=(1, 1))
+            plt.grid(True)
+            plt.tight_layout()
+            st.pyplot(fig)
+
+    else:
+        # Filter the data for the selected region
+        region_data = df[df['libelle_region'] == selected_region]
         # Group the consumption by year and by department
         grouped_data = region_data.groupby(['annee', 'libelle_departement'])['consototale'].sum().unstack()
 
@@ -140,11 +176,14 @@ def page3(df = departement_df):
         sns.lineplot(data=grouped_data, markers=True, ax=ax)
         plt.xlabel('Année')
         plt.ylabel('Consommation')
-        plt.title(f'{region}')
+        plt.title(f'{selected_region}')
         plt.legend(title='Département', bbox_to_anchor=(1, 1))
         plt.grid(True)
         plt.tight_layout()
         st.pyplot(fig)
+
+    st.markdown("""--------------
+    """)
 
     #plot 2 : par de la conssomation par filière 
     sum_conso_by_operator = df.groupby('operateur')['consototale'].sum()
@@ -158,7 +197,7 @@ def page3(df = departement_df):
     # Création du pie chart
     plt.figure(figsize=(8, 8))
     plt.pie(filtered_operators, labels=filtered_operators.index, 
-            autopct='%1.1f%%', colors=sns.color_palette())
+            autopct='%1.1f%%', colors=sns.color_palette('coolwarm'))
     plt.title('Part de la consommation par opérateur')
     plt.axis('equal') 
     st.pyplot(plt)
