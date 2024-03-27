@@ -44,7 +44,7 @@ def on_each_feature(feature, layer):
 
 
 # Fonction pour créer le graphique à barres
-def create_plot(region, conso_electricite=consommation_electricite , conso_gaz=consomaation_gaz):
+def create_plot(region, conso_electricite=consommation_electrique , conso_gaz=consomaation_gaz):
     conso_electricite_region = conso_electricite.get(region, 0)
     conso_gaz_region = conso_gaz.get(region, 0)
     
