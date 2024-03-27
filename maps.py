@@ -13,7 +13,7 @@ regions = gpd.read_file('regions.geojson')
 regions_df = pd.read_csv('conso-elec-gaz-region.csv', sep=';')
 
 consommation_electrique = regions_df[regions_df['filiere'] == 'Electricité'].groupby('libelle_region')['conso'].sum()
-consomaation_gaz = regions_df[regions_df['filiere'] == 'Gaz'].groupby('libelle_region')['conso'].sum()
+consomation_gaz = regions_df[regions_df['filiere'] == 'Gaz'].groupby('libelle_region')['conso'].sum()
 
 # Définir une fonction pour générer une couleur aléatoire
 def random_color():
@@ -44,16 +44,19 @@ def on_each_feature(feature, layer):
 
 
 # Fonction pour créer le graphique à barres
-def create_plot(region, conso_electricite=consommation_electrique , conso_gaz=consomaation_gaz):
+def create_plot(region, conso_electricite=consommation_electrique , conso_gaz=consomation_gaz):
     conso_electricite_region = conso_electricite.get(region, 0)
     conso_gaz_region = conso_gaz.get(region, 0)
     
+    if conso_gaz_region == 0 and region in conso_gaz.index:
+        conso_gaz_region = conso_gaz.loc[region]
+
     df_region = pd.DataFrame({
         'type_consommation': ['Electricité', 'Gaz'],
         'conso': [conso_electricite_region, conso_gaz_region]
     })
     
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(6, 4))
     sns.barplot(data=df_region, x='type_consommation', y='conso', ax=ax)
     plt.close(fig)
     return fig
