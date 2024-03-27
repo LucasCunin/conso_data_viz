@@ -13,7 +13,7 @@ regions = gpd.read_file('regions.geojson')
 regions_df = pd.read_csv('conso-elec-gaz-region.csv', sep=';')
 
 consommation_electrique = regions_df[regions_df['filiere'] == 'Electricité'].groupby('libelle_region')['conso'].sum()
-consommation_gaz = regions_df[regions_df['filiere'] == 'Gaz'].groupby('libelle_region')['conso']
+consommation_gaz = regions_df[regions_df['filiere'] == 'Gaz'].groupby('libelle_region')['conso'].sum()
 
 # Définir une fonction pour générer une couleur aléatoire
 def random_color():
