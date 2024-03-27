@@ -63,8 +63,8 @@ def fig_to_png_base64(fig):
     return base64.b64encode(buf.getvalue()).decode()
 
 # Ajouter les régions à la carte
-for feature in regions['features']:
-    region_name = feature['properties']['nom']
+for idx, row in regions.iterrows():
+    region_name = row['nom']
     
     # Créer le graphique pour la région
     fig = create_plot(region_name)
