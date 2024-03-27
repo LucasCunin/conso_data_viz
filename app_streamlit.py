@@ -21,7 +21,6 @@ def page1(df = region_df):
 ##############################################_Page 2_##############################################
 def page2(df = region_df):
     st.title("Graph région")
-    st.write("Bienvenue sur la page 2!")
 
     #dataframe pour les graph
     grouped_data = df.groupby(['annee', 'libelle_region'])['conso'].sum().unstack()
@@ -40,11 +39,13 @@ def page2(df = region_df):
 
     #graph1: Consomation total GAz + elec au fil des année
     
+    st.markdown("<center>Consommation par région au fil des années</center>", unsafe_allow_html=True)
+
     fig, ax = plt.subplots()
     sns.lineplot(data=grouped_data, markers=True, ax=ax)
     plt.xlabel('Année')
     plt.ylabel('Consommation')
-    plt.title('Consommation par région au fil des années')
+    #plt.title('Consommation par région au fil des années')
     plt.grid(True)
     plt.legend(title='Région', bbox_to_anchor=(1.05, 1), loc='upper left')
     st.pyplot(fig)
@@ -54,21 +55,24 @@ def page2(df = region_df):
     """)
 
     #graph2: meme chose mais séparer par filière (gaz et elec)
+    st.markdown("<center>Consommation d'electricité par région au fil des années</center>", unsafe_allow_html=True)
 
     fig, ax = plt.subplots()
     sns.lineplot(data=df_electricite_sum, markers=True, ax=ax)
     plt.xlabel('Année')
     plt.ylabel('Consommation Electricité')
-    plt.title('Consommation d\'electricité par région au fil des années')
+    #plt.title('Consommation d\'electricité par région au fil des années')
     plt.grid(True)
     plt.legend(title='Région', bbox_to_anchor=(1.05, 1), loc='upper left')
     st.pyplot(fig)
+
+    st.markdown("<center>Consommation de gaz par région au fil des années</center>", unsafe_allow_html=True)
 
     fig, ax = plt.subplots()
     sns.lineplot(data=df_gaz_sum, markers=True, ax=ax)
     plt.xlabel('Année')
     plt.ylabel('Consommation Gaz')
-    plt.title('Consommation de gaz par région au fil des années')
+    #plt.title('Consommation de gaz par région au fil des années')
     plt.grid(True)
     plt.legend(title='Région', bbox_to_anchor=(1.05, 1), loc='upper left')
     st.pyplot(fig)
@@ -130,9 +134,7 @@ def page2(df = region_df):
 ##############################################_Page 3_##############################################
 
 def page3(df = departement_df):
-    st.title("Page 3")
-    st.write("Bienvenue sur la page 3!")
-
+    st.title("consommation par département")
 
     #plot 1 : consommation par département au fil des années
     regions = df['libelle_region'].unique()
@@ -208,8 +210,8 @@ def page3(df = departement_df):
 # Créer un dictionnaire pour mapper les noms de pages aux fonctions
 pages = {
     "Carte des conso !": page1,
-    "La conssomation par régions": page2,
-    "La consomation par département": page3,
+    "La consommation par régions": page2,
+    "La consommation par département": page3,
 }
 
 # Créer une barre latérale pour la navigation

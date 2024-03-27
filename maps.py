@@ -13,7 +13,6 @@ regions = gpd.read_file('regions.geojson')
 regions_df = pd.read_csv('conso-elec-gaz-region.csv', sep=';')
 
 consommation_electrique = regions_df[regions_df['filiere'] == 'Electricité'].groupby('libelle_region')['conso'].sum()
-consommation_gaz = regions_df[regions_df['filiere'] == 'Gaz'].groupby('libelle_region')['conso'].sum()
 
 # Définir une fonction pour générer une couleur aléatoire
 def random_color():
@@ -44,19 +43,15 @@ def on_each_feature(feature, layer):
 
 
 # Fonction pour créer le graphique à barres
-def create_plot(region, conso_electricite=consommation_electrique , conso_gaz=consommation_gaz):
+def create_plot(region, conso_electricite=consommation_electrique):
     conso_electricite_region = conso_electricite.get(region, 0)
-    conso_gaz_region = conso_gaz.get(region, 0)
     
-    df_region = pd.DataFrame({
-        'type_consommation': ['Electricité', 'Gaz'],
-        'conso': [conso_electricite_region, conso_gaz_region]
-    })
-    
-    fig, ax = plt.subplots(figsize=(5, 3))
-    sns.barplot(data=df_region, x='type_consommation', y='conso', ax=ax)
+    fig, ax = plt.subplots(figsize=(2, 3))
+    sns.barplot(x=['Electricité'], y=[conso_electricite_region], ax=ax, color=sns.color_palette("YlOrRd")[0])
+    ax.set_ylabel('conso')
     plt.close(fig)
     return fig
+
 
 # Fonction pour encoder le graphique en image PNG
 def fig_to_png_base64(fig):
