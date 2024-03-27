@@ -231,7 +231,7 @@ def page3(df = departement_df):
     #plt.title("Évolution de la consommation pour chaque opérateur")
     plt.xlabel("Année")
     plt.ylabel("Consommation")
-    plt.legend()
+    plt.legend(title='Opérateur',bbox_to_anchor=(1.05, 1), loc='upper left')
     st.pyplot(plt)
 
 
