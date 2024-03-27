@@ -63,7 +63,7 @@ def fig_to_png_base64(fig):
     return base64.b64encode(buf.getvalue()).decode()
 
 # Ajouter les régions à la carte
-for feature in regions_geojson['features']:
+for feature in regions['features']:
     region_name = feature['properties']['nom']
     
     # Créer le graphique pour la région
